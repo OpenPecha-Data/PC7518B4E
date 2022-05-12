@@ -5,7 +5,7 @@ on:
     branches: [ master ]
     paths:
       - '**.txt'
-      - '**.yml'
+      - '**check_quality.yml'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      
+      - run: git pull
 
       - name: Set up Python
         uses: actions/setup-python@v1
@@ -26,8 +28,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install openpecha
           
-      - name: Count Non-Words
-        run: openpecha count-non-words $(pwd) --save
+      - name: Perform Quality Check
+        run: openpecha qc $(pwd) --save
         
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
